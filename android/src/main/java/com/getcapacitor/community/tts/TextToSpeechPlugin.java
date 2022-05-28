@@ -101,6 +101,51 @@ public class TextToSpeechPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void getSupportedEngines(PluginCall call) {
+        try {
+            JSArray engines = implementation.getSupportedEngines();
+            JSObject ret = new JSObject();
+            ret.put("engines", engines);
+            call.resolve(ret);
+        } catch (Exception ex) {
+            call.reject(ex.getLocalizedMessage());
+        }
+    }
+
+    @PluginMethod
+    public void getDefaults(PluginCall call) {
+        try {
+            JSObject ret = implementation.getDefaults();
+            call.resolve(ret);
+        } catch (Exception ex) {
+            call.reject(ex.getLocalizedMessage());
+        }
+    }
+
+    @PluginMethod
+    public void switchEngine(PluginCall call) {
+        String engineName = call.getString("engineName", "");
+
+        try {
+            SpeakResultCallback resultCallback = new SpeakResultCallback() {
+            @Override
+                public void onDone() {
+                    call.resolve();
+                }
+
+                @Override
+                public void onError() {
+                    call.reject(ERROR_UTTERANCE);
+                }
+            };
+            implementation.switchEngine(engineName, resultCallback);
+            // call.resolve();
+        } catch (Exception ex) {
+            call.reject(ex.getLocalizedMessage());
+        }
+    }
+
+    @PluginMethod
     public void isLanguageSupported(PluginCall call) {
         String lang = call.getString("lang", "");
         try {

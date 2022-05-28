@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.UtteranceProgressListener;
 import android.speech.tts.Voice;
+import android.speech.tts.TextToSpeech.EngineInfo;
 import android.util.Log;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
+import java.util.List;
 
 public class TextToSpeech implements android.speech.tts.TextToSpeech.OnInitListener {
 
@@ -24,6 +26,7 @@ public class TextToSpeech implements android.speech.tts.TextToSpeech.OnInitListe
     private android.speech.tts.TextToSpeech tts = null;
     private int initializationStatus;
     private JSObject[] supportedVoices = null;
+    private SpeakResultCallback resultCallback = null;
 
     TextToSpeech(Context context) {
         this.context = context;
@@ -36,6 +39,10 @@ public class TextToSpeech implements android.speech.tts.TextToSpeech.OnInitListe
 
     @Override
     public void onInit(int status) {
+        if (resultCallback != null) {
+            resultCallback.onDone();
+            resultCallback = null;
+        }
         this.initializationStatus = status;
     }
 
@@ -115,6 +122,17 @@ public class TextToSpeech implements android.speech.tts.TextToSpeech.OnInitListe
         return result;
     }
 
+    public JSArray getSupportedEngines() {
+        ArrayList<JSObject> engines = new ArrayList<>();
+        List<android.speech.tts.TextToSpeech.EngineInfo> supportedEngines = tts.getEngines();
+        for (android.speech.tts.TextToSpeech.EngineInfo supportedEngine : supportedEngines) {
+            JSObject obj = this.convertEngineToJSObject(supportedEngine);
+            engines.add(obj);
+        }
+        JSArray result = JSArray.from(engines.toArray());
+        return result;
+    }
+
     public void openInstall() {
         PackageManager packageManager = context.getPackageManager();
         Intent installIntent = new Intent();
@@ -128,6 +146,15 @@ public class TextToSpeech implements android.speech.tts.TextToSpeech.OnInitListe
         }
     }
 
+    public JSObject getDefaults() {
+        Voice voice = tts.getDefaultVoice();
+        JSObject obj = new JSObject();
+        obj.put("engine", tts.getDefaultEngine());
+        obj.put("voice", voice.getName());
+        obj.put("language", voice.getLocale().toLanguageTag());
+        return obj;
+    }
+
     public boolean isAvailable() {
         if (tts != null && initializationStatus == android.speech.tts.TextToSpeech.SUCCESS) {
             return true;
@@ -139,6 +166,20 @@ public class TextToSpeech implements android.speech.tts.TextToSpeech.OnInitListe
         Locale locale = Locale.forLanguageTag(lang);
         int result = tts.isLanguageAvailable(locale);
         return result == tts.LANG_AVAILABLE || result == tts.LANG_COUNTRY_AVAILABLE || result == tts.LANG_COUNTRY_VAR_AVAILABLE;
+    }
+
+    public void switchEngine(String engineName, SpeakResultCallback resultCallback) {
+        try {
+            if (tts != null) {
+                tts.stop();
+                tts.shutdown();
+            }
+            this.resultCallback = resultCallback;
+
+            tts = new android.speech.tts.TextToSpeech(context, this, engineName);
+        } catch (Exception ex) {
+            Log.d(LOG_TAG, ex.getLocalizedMessage());
+        }
     }
 
     public void onDestroy() {
@@ -157,6 +198,15 @@ public class TextToSpeech implements android.speech.tts.TextToSpeech.OnInitListe
         obj.put("lang", locale.toLanguageTag());
         obj.put("localService", !voice.isNetworkConnectionRequired());
         obj.put("default", false);
+        return obj;
+    }
+
+    private JSObject convertEngineToJSObject(android.speech.tts.TextToSpeech.EngineInfo engine) {
+        JSObject obj = new JSObject();
+        obj.put("icon", engine.icon);
+        obj.put("label", engine.label);
+        obj.put("name", engine.name);
+
         return obj;
     }
 }

@@ -16,6 +16,18 @@ export interface TextToSpeechPlugin {
    */
   getSupportedVoices(): Promise<{ voices: SpeechSynthesisVoice[] }>;
   /**
+   * Returns a list of supported voices.
+   */
+  getSupportedEngines(): Promise<{ engines: SpeechSynthesisEngine[] }>;
+
+  switchEngine(engineName: {engineName: string}): Promise<void>;
+
+  getDefaults(): Promise<{
+      engine: string,
+      voice: string,
+      language: string,
+  }>;
+  /**
    * Checks if a specific BCP 47 language tag is supported.
    */
   isLanguageSupported(options: {
@@ -105,4 +117,10 @@ export interface SpeechSynthesisVoice {
    * Example: `urn:moz-tts:sapi:Microsoft Zira Desktop - English (United States)?en-US`.
    */
   voiceURI: string;
+}
+
+export interface SpeechSynthesisEngine {
+  icon: number;
+  label: string;
+  name: string;
 }

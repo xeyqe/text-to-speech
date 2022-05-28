@@ -1,6 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { TextToSpeechPlugin, TTSOptions } from './definitions';
+import type { SpeechSynthesisEngine, TextToSpeechPlugin, TTSOptions } from './definitions';
 
 export class TextToSpeechWeb extends WebPlugin implements TextToSpeechPlugin {
   private speechSynthesis: SpeechSynthesis | null = null;
@@ -101,6 +101,26 @@ export class TextToSpeechWeb extends WebPlugin implements TextToSpeechPlugin {
     }
     return this.supportedVoices;
   }
+
+
+  public async getSupportedEngines(): Promise<{
+    engines: SpeechSynthesisEngine[];
+  }> {
+    this.throwUnimplementedError();
+  }
+
+  public async switchEngine(engineName: { engineName: string }): Promise<void> {
+    engineName;
+    this.throwUnimplementedError();
+  };
+
+  public async getDefaults(): Promise<{
+    engine: string,
+    voice: string,
+    language: string,
+  }> {
+    this.throwUnimplementedError();
+  };
 
   private throwUnsupportedError(): never {
     throw this.unavailable(

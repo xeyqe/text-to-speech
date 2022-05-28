@@ -93,6 +93,9 @@ const isLanguageSupported = async (lang: string) => {
 * [`stop()`](#stop)
 * [`getSupportedLanguages()`](#getsupportedlanguages)
 * [`getSupportedVoices()`](#getsupportedvoices)
+* [`getSupportedEngines()`](#getsupportedengines)
+* [`switchEngine(...)`](#switchengine)
+* [`getDefaults()`](#getdefaults)
 * [`isLanguageSupported(...)`](#islanguagesupported)
 * [`openInstall()`](#openinstall)
 * [Interfaces](#interfaces)
@@ -154,6 +157,43 @@ Returns a list of supported voices.
 --------------------
 
 
+### getSupportedEngines()
+
+```typescript
+getSupportedEngines() => Promise<{ engines: SpeechSynthesisEngine[]; }>
+```
+
+Returns a list of supported voices.
+
+**Returns:** <code>Promise&lt;{ engines: SpeechSynthesisEngine[]; }&gt;</code>
+
+--------------------
+
+
+### switchEngine(...)
+
+```typescript
+switchEngine(engineName: { engineName: string; }) => Promise<void>
+```
+
+| Param            | Type                                 |
+| ---------------- | ------------------------------------ |
+| **`engineName`** | <code>{ engineName: string; }</code> |
+
+--------------------
+
+
+### getDefaults()
+
+```typescript
+getDefaults() => Promise<{ engine: string; voice: string; language: string; }>
+```
+
+**Returns:** <code>Promise&lt;{ engine: string; voice: string; language: string; }&gt;</code>
+
+--------------------
+
+
 ### isLanguageSupported(...)
 
 ```typescript
@@ -211,6 +251,15 @@ The <a href="#speechsynthesisvoice">SpeechSynthesisVoice</a> interface represent
 | **`localService`** | <code>boolean</code> | Specifies whether the voice is supplied by a local (`true`) or remote (`false`) speech synthesizer service.                                                  |
 | **`name`**         | <code>string</code>  | Human-readable name that represents the voice. Example: `Microsoft Zira Desktop - English (United States)`.                                                  |
 | **`voiceURI`**     | <code>string</code>  | Type of URI and location of the speech synthesis service for this voice. Example: `urn:moz-tts:sapi:Microsoft Zira Desktop - English (United States)?en-US`. |
+
+
+#### SpeechSynthesisEngine
+
+| Prop        | Type                |
+| ----------- | ------------------- |
+| **`icon`**  | <code>number</code> |
+| **`label`** | <code>string</code> |
+| **`name`**  | <code>string</code> |
 
 </docgen-api>
 
