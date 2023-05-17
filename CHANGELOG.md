@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/capacitor-community/text-to-speech/compare/v2.1.0...v3.0.0) (2023-05-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* update to Capacitor 5 (#99)
+
+### Features
+
+* update gradle to 8.0.2 and gradle plugin to 8.0.0 ([be75995](https://github.com/capacitor-community/text-to-speech/commit/be7599547964f8520eb4a4108ac4702baf805ce7))
+* update to Capacitor 5 ([#99](https://github.com/capacitor-community/text-to-speech/issues/99)) ([7ca0ec4](https://github.com/capacitor-community/text-to-speech/commit/7ca0ec46ad3dc86710a22fca672e7bb4ab5eee42))
+
+## [2.1.0](https://github.com/capacitor-community/text-to-speech/compare/v2.0.1...v2.1.0) (2023-03-09)
+
+
+### Features
+
+* add support for `getSupportedVoices` on iOS ([b13d5a7](https://github.com/capacitor-community/text-to-speech/commit/b13d5a7dc7956e77e5c11b43480901bec544001d))
+* **android:** support the `voice` property ([#90](https://github.com/capacitor-community/text-to-speech/issues/90)) ([1d8865f](https://github.com/capacitor-community/text-to-speech/commit/1d8865f3dbe1ab86a840ff46a8b643e08fdd79ea))
+* **ios:** support the `voice` property ([#93](https://github.com/capacitor-community/text-to-speech/issues/93)) ([8b97820](https://github.com/capacitor-community/text-to-speech/commit/8b9782066dd0da9336bf9cd69698b602ad867659))
+
 ### [2.0.1](https://github.com/capacitor-community/text-to-speech/compare/v2.0.0...v2.0.1) (2022-08-04)
 
 
